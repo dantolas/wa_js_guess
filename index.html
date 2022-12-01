@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+
+    <div class="resultParas">
+        <p class="guesses"></p>
+        <p class="lastResult"></p>
+        <p class="lowOrHi"></p>
+      </div>
+
+    <label for="guessField">Enter a guess: </label>
+    <input type="number" id="guessField" class="guessField" />
+    <input type="submit" value="Submit guess" class="guessSubmit" />
+
+    <label for="modField">Enter a mod: </label>
+    <input type="number" id="modField" class="modField" />
+    <input type="submit" value="Submit mod" class="modSubmit" />
+    
+</body>
+
+<script>
+
+    
+
+    
+
+    
+    
+
+    let randomNumber = Math.floor(Math.random() * 1000) + 1;
+    console.log(randomNumber);
+    const guesses = document.querySelector('.guesses');
+    const lastResult = document.querySelector('.lastResult');
+    const lowOrHi = document.querySelector('.lowOrHi');
+
+    const guessSubmit = document.querySelector('.guessSubmit');
+    const modSubmit = document.querySelector('.modSubmit');
+    const guessField = document.querySelector('.guessField');
+    const modField = document.querySelector('.modField');
+    guessSubmit.addEventListener('click', checkGuess);
+
+    let guessCount = 1;
+    let resetButton;
+
+    
+
+    function checkGuess() {
+        const userGuess = Number(guessField.value);
+        
+        if (userGuess === randomNumber) {
+            lastResult.textContent = 'Congratulations! You got it right!';
+            lastResult.style.backgroundColor = 'green';
+            lowOrHi.textContent = '';
+            setGameOver();
+        
+        } else {
+            lastResult.textContent = '!!!GAME OVER!!!';
+            lowOrHi.textContent = '';
+            setGameOver();
+        }
+    }
+
+    function checkMod(){
+        const modNumber = Number(modField.value);
+        modField.value = "";
+        modField.focus();
+        if(modNumber <= 0 || modNumber > 99){
+            alert('Only numbers ranging from 1 to 99');
+            return
+        }
+        let modResult = randomNumber % modNumber;
+        guesses.textContent += `${modResult} `;
+    }
+
+    guessSubmit.addEventListener('click', checkGuess);
+
+    modSubmit.addEventListener('click', checkMod);
+
+    function setGameOver() {
+        guessField.disabled = true;
+        guessSubmit.disabled = true;
+        resetButton = document.createElement('button');
+        resetButton.textContent = 'Start new game';
+        document.body.append(resetButton);
+        resetButton.addEventListener('click', resetGame);
+    }
+
+    function resetGame() {
+        guessCount = 1;
+
+        const resetParas = document.querySelectorAll('.resultParas p');
+        for (const resetPara of resetParas) {
+            resetPara.textContent = '';
+        }
+
+        resetButton.parentNode.removeChild(resetButton);
+
+        guessField.disabled = false;
+        guessSubmit.disabled = false;
+        guessField.value = '';
+        guessField.focus();
+
+        lastResult.style.backgroundColor = 'white';
+
+        randomNumber = Math.floor(Math.random() * 1000) + 1;
+        console.log(randomNumber);
+    }
+
+
+</script>
+</html>
